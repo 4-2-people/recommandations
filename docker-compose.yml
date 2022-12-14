@@ -1,6 +1,18 @@
 version: "3"
 
 services:
+  backend:
+    image: backend
+    container_name: backend
+    build: .
+    user: appuser
+    ports:
+      - 8000:8000
+    volumes:
+      - ./service:/app
+    depends_on:
+      - database
+
   database:
     image: postgres:15-alpine
     hostname: $${POSTGRES_HOST}

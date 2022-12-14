@@ -1,7 +1,7 @@
 from fastapi.security import HTTPBasic
 from passlib.context import CryptContext
 
-DATABASE_URL = 'postgresql+asyncpg://user:password@0.0.0.0:8001/database'
+DATABASE_URL = 'postgresql+asyncpg://user:password@database:5432/database'
 
 security = HTTPBasic()
 
