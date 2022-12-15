@@ -13,6 +13,8 @@ SQLAlchemy = "^1.4.45"
 asyncpg = "^0.27.0"
 email-validator = "^1.3.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+dramatiq = {extras = ["redis", "watch"], version = "^1.13.0"}
+periodiq = "^0.12.1"
 
 [tool.poetry.dev-dependencies]
 

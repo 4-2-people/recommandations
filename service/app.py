@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from api import router
 from database import get_session
 
+# Create an application instance and connect endpoints
 app = FastAPI(title='recommandations')
 app.include_router(router)
 

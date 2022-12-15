@@ -21,4 +21,4 @@ RUN /root/.local/bin/poetry config virtualenvs.create false && \
 USER ${APP_USER}:${APP_USER}
 
 CMD alembic upgrade head && \
-    python3 app.py
+    uvicorn app:app --reload

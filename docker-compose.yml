@@ -7,11 +7,14 @@ services:
     build: .
     user: appuser
     ports:
-      - 8000:8000
+      - '8000:8000'
     volumes:
       - ./service:/app
     depends_on:
-      - database
+      database:
+        condition: service_started
+      cache:
+        condition: service_healthy
 
   database:
     image: postgres:15-alpine
@@ -24,10 +27,50 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     ports:
-      - 8001:5432
+      - '8001:5432'
     volumes:
       - database:/var/lib/postgresql/data
 
+  cache:
+    image: redis:7-alpine
+    hostname: $${REDIS_HOST}
+    container_name: cache
+    environment:
+      - REDIS_HOST=cache
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    ports:
+      - '8002:6379'
+
+  worker:
+    image: worker
+    hostname: worker
+    container_name: worker
+    build: .
+    user: appuser
+    volumes:
+      - ./service:/app
+    depends_on:
+      cache:
+        condition: service_started
+    # Don't use --watch for production setup!
+    command: 'dramatiq --watch . --processes 4 core.workers'
+
+  scheduler:
+    image: scheduler
+    hostname: scheduler
+    container_name: scheduler
+    build: .
+    user: appuser
+    volumes:
+      - ./service:/app
+    depends_on:
+      cache:
+        condition: service_started
+    command: 'periodiq core.workers'
 
 volumes:
   database:
