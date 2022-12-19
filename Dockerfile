@@ -19,6 +19,3 @@ RUN /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install $(test "$ENVIRONMENT" = "production" && echo "--no-dev") --no-interaction
 
 USER ${APP_USER}:${APP_USER}
-
-CMD alembic upgrade head && \
-    uvicorn app:app --reload

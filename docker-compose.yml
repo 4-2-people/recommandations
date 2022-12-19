@@ -12,9 +12,10 @@ services:
       - ./service:/app
     depends_on:
       database:
-        condition: service_started
+        condition: service_healthy
       cache:
         condition: service_healthy
+    command: bash -c 'alembic upgrade head && uvicorn app:app --reload --host 0.0.0.0'
 
   database:
     image: postgres:15-alpine
@@ -26,6 +27,12 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
     ports:
       - '8001:5432'
     volumes:
@@ -54,8 +61,10 @@ services:
     volumes:
       - ./service:/app
     depends_on:
+      database:
+        condition: service_healthy
       cache:
-        condition: service_started
+        condition: service_healthy
     # Don't use --watch for production setup!
     command: 'dramatiq --watch . --processes 4 core.workers'
 
@@ -69,7 +78,7 @@ services:
       - ./service:/app
     depends_on:
       cache:
-        condition: service_started
+        condition: service_healthy
     command: 'periodiq core.workers'
 
 volumes:
