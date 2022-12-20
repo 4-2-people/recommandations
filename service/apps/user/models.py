@@ -45,4 +45,5 @@ class User(Model):
                 )
                 await session.commit()
         except IntegrityError:
+            await session.rollback()
             raise UserAlreadyExists()

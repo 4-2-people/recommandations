@@ -18,6 +18,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 from apps.user.models import *
+from apps.movie.models import *
 from database import Base
 import settings
 
