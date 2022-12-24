@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from api import router
-from database import get_session
+from database import get_session, engine
 
 # Create an application instance and connect endpoints
 app = FastAPI(title='recommandations')
@@ -13,6 +13,11 @@ app.include_router(router)
 @app.on_event('startup')
 async def startup():
     get_session()
+
+
+@app.on_event('shutdown')
+async def shutdown():
+    await engine.dispose()
 
 
 @app.exception_handler(Exception)

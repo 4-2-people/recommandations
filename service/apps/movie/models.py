@@ -1,4 +1,6 @@
-from sqlalchemy import Column, String, ForeignKey, Integer, Float, UniqueConstraint
+from sqlalchemy import (
+    Column, String, ForeignKey, Integer, Float, UniqueConstraint
+)
 from sqlalchemy.orm import relationship, validates
 
 from apps.movie.exceptions import InvalidScoreError
@@ -17,9 +19,9 @@ class Rating(Model):
     """The rating given to the movie by the user."""
 
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    user = relationship('User', foreign_keys=[user_id])
+    user = relationship('User', foreign_keys=[user_id], backref='scores')
     movie_id = Column(Integer, ForeignKey('movie.id'), nullable=False)
-    movie = relationship('Movie', foreign_keys=[movie_id])
+    movie = relationship('Movie', foreign_keys=[movie_id], backref='scores')
     score = Column(Integer, nullable=False)
 
     __table_args__ = (
