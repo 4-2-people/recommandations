@@ -1,6 +1,7 @@
 from sqlalchemy import (
-    Column, String, ForeignKey, Integer, Float, UniqueConstraint
+    Column, String, ForeignKey, Integer, Float, UniqueConstraint, select, func
 )
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship, validates
 
 from apps.movie.exceptions import InvalidScoreError
@@ -13,6 +14,27 @@ class Movie(Model):
     title = Column(String(64), nullable=False)
     description = Column(String(1024))
     rating = Column(Float, nullable=False, default=0)
+
+    @staticmethod
+    async def top(session: AsyncSession, limit: int = 64) -> list[int]:
+        """Get a list of the most popular movies by scores count and rating."""
+
+        return (
+            await session.execute(
+                select(
+                    Movie.id
+                ).select_from(
+                    Movie
+                ).join(
+                    Rating
+                ).order_by(
+                    Movie.rating.desc(),
+                    func.count(Movie.scores).desc()
+                ).group_by(
+                    Movie.id
+                ).limit(limit)
+            )
+        ).scalars()
 
 
 class Rating(Model):
