@@ -81,5 +81,14 @@ services:
         condition: service_healthy
     command: 'periodiq core.workers'
 
+  prometheus:
+    image: prom/prometheus:v2.41.0
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
 volumes:
   database:

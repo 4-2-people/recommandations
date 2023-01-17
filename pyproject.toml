@@ -15,6 +15,8 @@ email-validator = "^1.3.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 dramatiq = {extras = ["redis", "watch"], version = "^1.13.0"}
 periodiq = "^0.12.1"
+prometheus-fastapi-instrumentator = "^5.9.1"
+prometheus-client = "^0.15.0"
 
 [tool.poetry.dev-dependencies]
 

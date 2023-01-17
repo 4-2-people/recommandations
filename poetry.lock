@@ -288,6 +288,18 @@ python-versions = ">=3.6"
 twisted = ["twisted"]
 
 [[package]]
+name = "prometheus-fastapi-instrumentator"
+version = "5.9.1"
+description = "Instrument your FastAPI with Prometheus metrics"
+category = "main"
+optional = false
+python-versions = ">=3.7.0,<4.0.0"
+
+[package.dependencies]
+fastapi = ">=0.38.1,<1.0.0"
+prometheus-client = ">=0.8.0,<1.0.0"
+
+[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
@@ -480,7 +492,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "4f6815faf931d8fd0cc5d49c5afbb9e9c0b96b03f03ede27fa789e479b06e0d6"
+content-hash = "4849736d33dfe7f18be622fbb29c6ede99f7d427833c14fb2a3d2310fc34a2a0"
 
 [metadata.files]
 alembic = []
@@ -577,6 +589,7 @@ periodiq = [
     {file = "periodiq-0.12.1.tar.gz", hash = "sha256:b849b04c47e3daa22fdf9fad87804255ff84aa9831f5b690fa1374d254a77cf9"},
 ]
 prometheus-client = []
+prometheus-fastapi-instrumentator = []
 pycparser = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
     {file = "pycparser-2.21.tar.gz", hash = "sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206"},

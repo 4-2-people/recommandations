@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from api import router
 from database import get_session, engine
@@ -12,7 +13,11 @@ app.include_router(router)
 
 @app.on_event('startup')
 async def startup():
+    # Check database connection
     get_session()
+
+    # Configure prometheus /metrics
+    Instrumentator().instrument(app).expose(app)
 
 
 @app.on_event('shutdown')
