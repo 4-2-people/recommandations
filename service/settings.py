@@ -1,9 +1,8 @@
 import dramatiq
 from dramatiq.brokers.redis import RedisBroker
-from periodiq import PeriodiqMiddleware
-from dramatiq.middleware import default_middleware
 from fastapi.security import HTTPBasic
 from passlib.context import CryptContext
+from periodiq import PeriodiqMiddleware
 
 
 class Cache:
@@ -26,10 +25,6 @@ security = HTTPBasic()
 password_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 # Setup asynchronous workers with a Redis broker
-broker = RedisBroker(
-    url=Cache.worker_queue(),
-    # Disable prometheus middleware
-    middleware=[m() for m in default_middleware[1:]]
-)
+broker = RedisBroker(url=Cache.worker_queue())
 broker.add_middleware(PeriodiqMiddleware(skip_delay=30))
 dramatiq.set_broker(broker)

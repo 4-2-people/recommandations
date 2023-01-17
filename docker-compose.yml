@@ -58,6 +58,8 @@ services:
     container_name: worker
     build: .
     user: appuser
+    ports:
+      - '9191:9191'
     volumes:
       - ./service:/app
     depends_on:
